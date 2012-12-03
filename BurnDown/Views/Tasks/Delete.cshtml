@@ -1,0 +1,41 @@
+﻿@model BurnDown.Models.task
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>task</legend>
+
+   
+    <div class="display-label">@Html.LabelFor(Model => Model.taskName)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.taskName)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(Model => Model.dueDate)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dueDate)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(Model => Model.notes)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.notes)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(Model => Model.developer.full_name)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.developer.full_name)
+    </div>
+
+        
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BurnDown.Models;
+using System.Data.Objects;
 
 namespace BurnDown.Controllers
 {
@@ -10,11 +12,64 @@ namespace BurnDown.Controllers
     {
         //
         // GET: /Tasks/
+        private DB db{ get{return new DB();}}
+
+        private ObjectSet<task> tasks{ get { return db.tasks; }}
+
+        private task task { 
+            get {
+                int id = Convert.ToInt32(this.RouteData.Values["id"]);
+                return db.tasks.SingleOrDefault(t => t.taskId == id);
+            }
+        }
+
+        private IList<SelectListItem> devList
+        {
+            get{
+             IList<SelectListItem> devList = new List<SelectListItem>();
+             
+             foreach (BurnDown.Models.developer dev in db.developers)
+             {
+                 SelectListItem DevItem = new SelectListItem();
+                 DevItem.Text = dev.firstName + " " + dev.lastName;
+                 DevItem.Value = dev.developerId.ToString();
+                 devList.Add(DevItem);
+                 try
+                 {
+                     if (task.developer.developerId == dev.developerId) DevItem.Selected = true;
+                 }
+                 catch { }
+                 DevItem = null;
+             }
+             return devList;
+            }
+        }
+
+        private IList<SelectListItem> projList{
+            get{
+                IList<SelectListItem> projList = new List<SelectListItem>();
+
+                foreach (BurnDown.Models.project proj in db.projects)
+                {
+                    SelectListItem ProjItem = new SelectListItem();
+                    ProjItem.Text = proj.projectName;
+                    ProjItem.Value = proj.projectId.ToString();
+                    projList.Add(ProjItem);
+                    try
+                    {
+                        if (task.project.projectId == proj.projectId) ProjItem.Selected = true;
+                    }
+                    catch{}
+                    ProjItem = null;
+
+                }
+                return projList;
+            }
+        }
+
 
         public ActionResult Index()
         {
-            var db = new BurnDown.Models.DB();
-            var tasks = db.tasks;
             return View(tasks);
         }
 
@@ -23,16 +78,9 @@ namespace BurnDown.Controllers
 
         public ActionResult Details(int id)
         {
-            var db = new BurnDown.Models.DB();
-            var tasks = db.tasks;
-
-            var task =
-                from t in tasks
-                where t.taskId == id
-                select t;
-           
-            return View(task.FirstOrDefault());
+            return View(tasks.FirstOrDefault(t=>t.taskId==id));
         }
+
 
         //
         // GET: /Tasks/Create
@@ -40,38 +88,9 @@ namespace BurnDown.Controllers
         [Authorize]
         public ActionResult Create(int project_id, System.Nullable<int> devId)
         {
-            var db = new BurnDown.Models.DB();
-            var developers = db.developers;
-
-            IList<SelectListItem> devList = new List<SelectListItem>();
-
-            foreach (BurnDown.Models.developer dev in developers)
-            {
-                SelectListItem DevItem = new SelectListItem();
-                DevItem.Text = dev.firstName + " " + dev.lastName;
-                DevItem.Value = dev.developerId.ToString();
-                devList.Add(DevItem);
-                if (devId == dev.developerId) DevItem.Selected = true; 
-                DevItem = null;
-            }
-            ViewData["ddList"] = devList;
             
-              
-           
-            var projects = db.projects;
-
-            IList<SelectListItem> projList = new List<SelectListItem>();
-
-            foreach (BurnDown.Models.project proj in projects)
-            {
-                SelectListItem ProjItem = new SelectListItem();
-                ProjItem.Text = proj.projectName;
-                ProjItem.Value = proj.projectId.ToString();
-                projList.Add(ProjItem);
-                if (project_id == proj.projectId) ProjItem.Selected = true;
-                ProjItem = null;
-
-            }
+            var developers = db.developers;
+            ViewData["ddList"] = devList;
             ViewData["projDDList"] = projList;
             return View();
         } 
@@ -84,65 +103,21 @@ namespace BurnDown.Controllers
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
-            //try
-            //{
-                // TODO: Add insert logic here
-
-
-            var newTask = new BurnDown.Models.task();
+               var newTask = new BurnDown.Models.task();
                 newTask.priority = int.Parse(collection["priority"]);
                 newTask.taskName = collection["taskName"];
                 newTask.developer_developerId = int.Parse(collection["ddList"]);
-               // newTask.hoursSpentOnTask = int.Parse(collection["hoursSpentOnTask"]);
                 newTask.originalEstimatedHours = int.Parse(collection["originalEstimatedHours"]);
-                //newTask.percentCompleted = int.Parse(collection["percentCompleted"]);
                 newTask.project_projectId = int.Parse(collection["projDDList"]);
-             //   newTask.shareOfProject = int.Parse(collection["shareOfProject"]);
                 newTask.hoursForTasksWithHigherPriority = int.Parse(collection["hoursForTasksWithHigherPriority"] + "0");
                 newTask.startDate = DateTime.Parse(collection["startDate"]);
                 newTask.dueDate = DateTime.Parse(collection["dueDate"]);
-                var db = new BurnDown.Models.DB();
-                var Tasks = db.tasks;
-                Tasks.AddObject(newTask);
+                
+                tasks.AddObject(newTask);
                 db.SaveChanges();
+                
                 return RedirectToAction("Index");
 
-
-            //}
-            //catch
-            //{
-            //    var db = new BurnDown.Models.DB();
-            //    var developers = db.developers;
-
-            //    IList<SelectListItem> devList = new List<SelectListItem>();
-
-            //    foreach (BurnDown.Models.developer dev in developers)
-            //    {
-            //        SelectListItem DevItem = new SelectListItem();
-            //        DevItem.Text = dev.firstName + " " + dev.lastName;
-            //        DevItem.Value = dev.developerId.ToString();
-            //        devList.Add(DevItem);
-            //        DevItem = null;
-            //    }
-            //    ViewData["ddList"] = devList;
-
-
-
-            //    var projects = db.projects;
-
-            //    IList<SelectListItem> projList = new List<SelectListItem>();
-
-            //    foreach (BurnDown.Models.project proj in projects)
-            //    {
-            //        SelectListItem ProjItem = new SelectListItem();
-            //        ProjItem.Text = proj.projectName;
-            //        ProjItem.Value = proj.projectId.ToString();
-            //        projList.Add(ProjItem);
-            //        ProjItem = null;
-            //    }
-            //    ViewData["projDDList"] = projList;
-            //    return View();
-            //}
         }
         
         //
@@ -150,46 +125,10 @@ namespace BurnDown.Controllers
         [Authorize]
         public ActionResult Edit(int id)
         {
-            var db = new BurnDown.Models.DB();
-            var developers = db.developers;
-
-            IList<SelectListItem> devList = new List<SelectListItem>();
-
-            foreach (BurnDown.Models.developer dev in developers)
-            {
-                SelectListItem DevItem = new SelectListItem();
-                DevItem.Text = dev.firstName + " " + dev.lastName;
-                DevItem.Value = dev.developerId.ToString();
-                devList.Add(DevItem);
-                DevItem = null;
-            }
             ViewData["developer_developerId"] = devList;
-
-
-
-            var projects = db.projects;
-
-            IList<SelectListItem> projList = new List<SelectListItem>();
-
-            foreach (BurnDown.Models.project proj in projects)
-            {
-                SelectListItem ProjItem = new SelectListItem();
-                ProjItem.Text = proj.projectName;
-                ProjItem.Value = proj.projectId.ToString();
-                projList.Add(ProjItem);
-                ProjItem = null;
-            }
             ViewData["project"] = projList;
+            return View(task);
 
-            var tasks = db.tasks;
-            var task =
-                from t in tasks
-                where t.taskId == id
-                select t;
-
-            return View(task.FirstOrDefault());
-
-          
         }
 
         //
@@ -197,14 +136,7 @@ namespace BurnDown.Controllers
         [Authorize]
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
-        {
-            
-               
-                    var db = new BurnDown.Models.DB();
-                    var tasks = db.tasks;
-                    var task = tasks
-                        .Where(w => w.taskId == id)
-                        .SingleOrDefault();
+        {          
                     task.developer_developerId = int.Parse(collection["developer_developerId"]);
                     task.dueDate = DateTime.Parse(collection["dueDate"]);
                     task.hoursSpentOnTask= int.Parse(collection["hoursSpentOnTask"]);
@@ -216,54 +148,8 @@ namespace BurnDown.Controllers
                     task.startDate = DateTime.Parse(collection["startDate"]);
                     task.taskName = collection["taskName"];
                     db.SaveChanges();
-                    // TODO: Add insert logic here
-
                     return RedirectToAction("Details", new { controller = "Projects", id = collection["project"] });
-                //    try
-                //    { }
-                //catch
-                //{
-                //    var db = new BurnDown.Models.DB();
-                //    var developers = db.developers;
-
-                //    IList<SelectListItem> devList = new List<SelectListItem>();
-
-                //    foreach (BurnDown.Models.developer dev in developers)
-                //    {
-                //        SelectListItem DevItem = new SelectListItem();
-                //        DevItem.Text = dev.firstName + " " + dev.lastName;
-                //        DevItem.Value = dev.developerId.ToString();
-                //        devList.Add(DevItem);
-                //        DevItem = null;
-                //    }
-                //    ViewData["developer_developerId"] = devList;
-
-
-
-                //    var projects = db.projects;
-
-                //    IList<SelectListItem> projList = new List<SelectListItem>();
-
-                //    foreach (BurnDown.Models.project proj in projects)
-                //    {
-                //        SelectListItem ProjItem = new SelectListItem();
-                //        ProjItem.Text = proj.projectName;
-                //        ProjItem.Value = proj.projectId.ToString();
-                //        projList.Add(ProjItem);
-                //        ProjItem = null;
-                //    }
-                //    ViewData["project"] = projList;
-
-                //    var tasks = db.tasks;
-                //    var task =
-                //        from t in tasks
-                //        where t.taskId == id
-                //        select t;
-
-                //    return View(task.FirstOrDefault());
-                //}
-            
-           
+              
         }
 
         //
@@ -271,7 +157,7 @@ namespace BurnDown.Controllers
         [Authorize]
         public ActionResult Delete(int id)
         {
-            return View();
+            return View(task);
         }
 
         //
@@ -282,13 +168,16 @@ namespace BurnDown.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
- 
+                DB dd = new DB();
+                var task = dd.tasks.SingleOrDefault(t => t.taskId == id);
+                dd.DeleteObject(task);
+                dd.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                ViewBag.e = e;
+                return View(task);
             }
         }
         
@@ -304,7 +193,6 @@ namespace BurnDown.Controllers
         [HttpPost]
         public ActionResult CreateagendaItem(Models.agendaItem newT)
         {
-            var db = new BurnDown.Models.DB();
             db.agendaItems.AddObject(newT);
             db.SaveChanges();
 
@@ -341,9 +229,6 @@ namespace BurnDown.Controllers
         [HttpPost]
         public ActionResult CreateagendaItemFromCSL(FormCollection collection)
         {
-
-            
-            var db = new BurnDown.Models.DB();
             string[] namesArr = collection["agendaItemName"].Split('\n');
             int task_taskId = int.Parse(collection["task_taskId"]);
 
@@ -356,8 +241,6 @@ namespace BurnDown.Controllers
                 db.agendaItems.AddObject(newT);
             }
 
-             
-            
             db.SaveChanges();
 
             var allPtagendaItems =
@@ -404,9 +287,7 @@ namespace BurnDown.Controllers
         [HttpPost]
         public ActionResult UpdateAgendaItem(FormCollection pST)
         {
-            var db = new BurnDown.Models.DB();
-            
-          
+           
             var agendaItem =
                  (from st in db.agendaItems
                  where st.agendaItemId == int.Parse(pST["agendaItemId"])
@@ -448,7 +329,7 @@ namespace BurnDown.Controllers
         [HttpGet]
         public ActionResult UpdateAgendaItem(int id)
     {
-        var db = new BurnDown.Models.DB();
+       
 
         var agendaItem =
              (from st in db.agendaItems

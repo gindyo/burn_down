@@ -14,7 +14,7 @@
 <h2>  @Html.Label(@ViewData["projectName"].ToString()) Details</h2>
 
 <p>
-    @Html.ActionLink("Create New Task", "Create", new { controller = "Tasks", id = @ViewData["projectId"], devId =(int) @ViewData["devId"] })
+    @Html.ActionLink("Create New Task", "Create", new { controller = "Tasks", project_id = @ViewData["projectId"], devId =(int) @ViewData["devId"] })
 </p>
 <table width="50%" style="float:left">
     <tr>
@@ -24,7 +24,9 @@
         <th>
             % Completed
         </th>
-       
+         <th>
+            Status
+        </th>
         <th>
             Priority
         </th>
@@ -50,6 +52,10 @@
             @Html.DisplayFor(modelItem => item.percentCompleted)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+
+        <td>
             @Html.DisplayFor(modelItem => item.priority)
         </td>
         <td>
@@ -63,8 +69,9 @@
        
         <td>
          
-            @Html.ActionLink("Task Details", "/Details", new { controller="Tasks", id=item.taskId }) |
-            @Html.ActionLink("Edit", "/Edit", new { controller="Tasks", id=item.taskId })
+            @Html.ActionLink("Details", "/Details", new { controller="Tasks", id=item.taskId }) |
+            @Html.ActionLink("Edit", "/Edit", new { controller="Tasks", id=item.taskId }) |
+            @Html.ActionLink("Delete", "/Delete", new { controller="Tasks", id=item.taskId })
            
         </td>
     </tr>

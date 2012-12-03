@@ -21,13 +21,13 @@ namespace BurnDown.Models
             }
         }
 
-      
 
-        public int? developerAvailabilityPerDay
+
+        int? IChartable.developerAvailabilityPerDay
         {
             get
             {
-                throw new NotImplementedException();
+                return this.developer.hoursPerDayAvailable;
             }
             set
             {
@@ -53,7 +53,7 @@ namespace BurnDown.Models
         {
             get
             {
-                throw new NotImplementedException();
+                return this.project_projectId;
             }
             set
             {
@@ -79,7 +79,7 @@ namespace BurnDown.Models
         {
             get
             {
-                throw new NotImplementedException();
+                return this.project.projectName;
             }
             set
             {
@@ -91,7 +91,7 @@ namespace BurnDown.Models
         {
             get
             {
-                throw new NotImplementedException();
+                return this.hoursForTasksWithHigherPriority;
             }
             set
             {
