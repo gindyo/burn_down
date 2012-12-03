@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .db
 *.obj
 *.exe
@@ -9,10 +10,8 @@
 *_i.c
 *_p.c
 *.ncb
-*.suo
 *.sln
 *.sln.docstates
-*.csproj
 *.tlb
 *.tlh
 *.bak
@@ -29,3 +28,7 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 *.mdf
 *.ldf
+=======
+obj\*
+bin\*
+>>>>>>> modified
