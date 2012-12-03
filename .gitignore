@@ -10,6 +10,7 @@
 *_p.c
 *.ncb
 *.suo
+BurnDown.suo
 *.sln
 *.sln.docstates
 *.csproj
