@@ -9,7 +9,6 @@
 *_i.c
 *_p.c
 *.ncb
-*.suo
 *.sln
 *.sln.docstates
 *.tlb
@@ -28,4 +27,3 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 *.mdf
 *.ldf
-*.csproj
