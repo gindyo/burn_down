@@ -78,7 +78,7 @@ namespace BurnDown.Models
             jsOutput.AppendLine("ctx.moveTo(0," + ch + ");");
             jsOutput.AppendLine("ctx.lineTo(" + canvasWidth + "," + ch + ");");
             jsOutput.AppendLine("ctx.stroke();");
-
+            jsOutput.AppendLine(" ctx.strokeText('50%',0," + ch / 2 + ");");
             int barWidth = canvasWidth / ((_chartEntities.Count() * 2) + 1);
 
             for (int i = 0; i < _chartEntities.Count(); i++)
@@ -90,7 +90,7 @@ namespace BurnDown.Models
                 }
                 int h = _chartEntities[i].percentCompleted * ch / 100;
                 jsOutput.AppendLine("var ctx" + i + "= c.getContext(\"2d\");");
-                jsOutput.AppendLine("ctx" + i + ".fillStyle = " + generateColor(_chartEntities[i]) + ";");
+                jsOutput.AppendLine("ctx" + i + ".fillStyle ='rgb(0,0,55)';");
                 if (h == 0) h = 2;
                 jsOutput.AppendLine("ctx" + i + ".fillRect(" + x + ",(" + (ch - h) + ")," + barWidth + "," + h + ");");
                 jsOutput.AppendLine("ctx" + i + ".shadowColor=\"black\";");
@@ -153,7 +153,7 @@ namespace BurnDown.Models
                 }
                 int h = _chartEntities[i].percentCompleted * ch / 100;
                 jsOutput.AppendLine("var ctx" + i + "= c.getContext(\"2d\");");
-                jsOutput.AppendLine("ctx" + i + ".fillStyle = rgb(\'255,0,0\');");
+                jsOutput.AppendLine("ctx" + i + ".fillStyle = 'rgb(\'255,255,255\')';");
                 if (h == 0) h = 2;
                 jsOutput.AppendLine("ctx" + i + ".rect(" + x + ",(" + (ch - h) + ")," + barWidth + "," + h + ");");
                 jsOutput.AppendLine("ctx" + i + ".shadowColor=\"black\";");
