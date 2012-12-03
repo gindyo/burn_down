@@ -15,8 +15,8 @@ namespace BurnDown.Controllers
         public ActionResult Index()
         {
 
-            var db = new BurnDown.DB();
-            var projects = db.vProjects;
+            var db = new BurnDown.Models.DB();
+            var projects = db.projects;
             //var developers = db.developers;
             //Dictionary<int,Models.developer> devsResultDict = developers.ToDictionary(d=>d.developerId);
             //ViewData["developers"] = devsResultDict;
@@ -34,12 +34,12 @@ namespace BurnDown.Controllers
         public ActionResult Details(int id)
         {
             
-            var db = new BurnDown.DB();
-            var tasks = db.vTasks;
+            var db = new BurnDown.Models.DB();
+            var tasks = db.tasks;
 
             var project =
                 from t in tasks
-                where t.projectId == id
+                where t.project_projectId == id
                 select t;
 
             var pr =
@@ -53,7 +53,7 @@ namespace BurnDown.Controllers
             {
                 var dev =
                     from t in tasks
-                    where t.developerId == task.developerId && t.priority > task.priority
+                    where t.developer_developerId == task.developer_developerId && t.priority > task.priority
                     select new { t.originalEstimatedHours, t.hoursSpentOnTask };
 
                 int hoursWithHigherPriority = 0;
@@ -80,7 +80,7 @@ namespace BurnDown.Controllers
 
         public ActionResult Create()
         {
-            var db = new BurnDown.DB();
+            var db = new BurnDown.Models.DB();
             var developers = db.developers;
             
             IList<SelectListItem> devList = new List<SelectListItem>();
@@ -114,10 +114,10 @@ namespace BurnDown.Controllers
                     newProject.projectName = collection["projectName"];
                     newProject.leadDeveloper = int.Parse(collection["ddList"]);
 
-                    var db = new BurnDown.DB();
+                    var db = new BurnDown.Models.DB();
                     var projects = db.projects;
-                    projects.InsertOnSubmit(newProject);
-                    db.SubmitChanges();
+                    projects.AddObject(newProject);
+                    db.SaveChanges();
                     return RedirectToAction("Index");
                 }
                 catch
@@ -132,8 +132,8 @@ namespace BurnDown.Controllers
  
         public ActionResult Edit(int id)
         {
-            var db = new BurnDown.DB();
-            var project = db.vProjects;
+            var db = new BurnDown.Models.DB();
+            var project = db.projects;
             var proj = from p in project where p.projectId == id select p;
           
             IList<SelectListItem> devList = new List<SelectListItem>();
@@ -160,7 +160,7 @@ namespace BurnDown.Controllers
             try
             {
                 // TODO: Add insert logic here
-                var db = new BurnDown.DB();
+                var db = new BurnDown.Models.DB();
                 var projects = db.projects;
 
                 var newProject =
@@ -172,7 +172,7 @@ namespace BurnDown.Controllers
                 newProject.priority = int.Parse(collection["priority"]);
                 newProject.projectName = collection["projectName"];
                 newProject.leadDeveloper = int.Parse(collection["ddList"]);
-                db.SubmitChanges();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch

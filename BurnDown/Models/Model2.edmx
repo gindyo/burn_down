@@ -1,0 +1,358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BurnDown.Models.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="BurnDownModelsStoreContainer">
+    <EntitySet Name="agendaItems" EntityType="BurnDown.Models.Store.agendaItems" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="developers" EntityType="BurnDown.Models.Store.developers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="projects" EntityType="BurnDown.Models.Store.projects" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="tasks" EntityType="BurnDown.Models.Store.tasks" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="taskdeveloper" Association="BurnDown.Models.Store.taskdeveloper">
+      <End Role="task" EntitySet="tasks" />
+      <End Role="developer" EntitySet="developers" />
+    </AssociationSet>
+    <AssociationSet Name="taskagendaItem" Association="BurnDown.Models.Store.taskagendaItem">
+      <End Role="task" EntitySet="tasks" />
+      <End Role="agendaItem" EntitySet="agendaItems" />
+    </AssociationSet>
+    <AssociationSet Name="projecttask" Association="BurnDown.Models.Store.projecttask">
+      <End Role="project" EntitySet="projects" />
+      <End Role="task" EntitySet="tasks" />
+    </AssociationSet>
+    <AssociationSet Name="developerproject" Association="BurnDown.Models.Store.developerproject">
+      <End Role="developer" EntitySet="developers" />
+      <End Role="project" EntitySet="projects" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="agendaItems">
+    <Key>
+      <PropertyRef Name="agendaItemId" />
+    </Key>
+    <Property Name="agendaItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="agendaItemName" Type="nchar" Nullable="false" MaxLength="50" />
+    <Property Name="completed" Type="bit" Nullable="false" />
+    <Property Name="notes" Type="nchar" Nullable="true" MaxLength="2000" />
+    <Property Name="task_taskId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="developers">
+    <Key>
+      <PropertyRef Name="developerId" />
+    </Key>
+    <Property Name="developerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="firstName" Type="nchar" Nullable="false" MaxLength="20" />
+    <Property Name="lastName" Type="nchar" Nullable="true" MaxLength="20" />
+    <Property Name="email" Type="nchar" Nullable="true" MaxLength="30" />
+    <Property Name="phone" Type="nchar" Nullable="true" MaxLength="12" />
+    <Property Name="hoursPerDayAvailable" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="projects">
+    <Key>
+      <PropertyRef Name="projectId" />
+    </Key>
+    <Property Name="projectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="projectName" Type="nchar" Nullable="false" MaxLength="50" />
+    <Property Name="priority" Type="int" Nullable="false" />
+    <Property Name="leadDeveloper" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tasks">
+    <Key>
+      <PropertyRef Name="taskId" />
+    </Key>
+    <Property Name="taskId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="originalEstimatedHours" Type="int" Nullable="false" />
+    <Property Name="hoursSpentOnTask" Type="int" Nullable="false" />
+    <Property Name="shareOfProject" Type="int" Nullable="true" />
+    <Property Name="percentCompleted" Type="int" Nullable="true" />
+    <Property Name="priority" Type="int" Nullable="false" />
+    <Property Name="taskName" Type="nchar" Nullable="false" MaxLength="50" />
+    <Property Name="startDate" Type="datetime" Nullable="false" />
+    <Property Name="dueDate" Type="datetime" Nullable="false" />
+    <Property Name="hoursForTasksWithHigherPriority" Type="int" Nullable="true" />
+    <Property Name="notes" Type="nchar" Nullable="true" MaxLength="2000" />
+    <Property Name="developer_developerId" Type="int" Nullable="false" />
+    <Property Name="project_projectId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="taskdeveloper">
+    <End Role="task" Type="BurnDown.Models.Store.tasks" Multiplicity="*" />
+    <End Role="developer" Type="BurnDown.Models.Store.developers" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="developer">
+        <PropertyRef Name="developerId" />
+      </Principal>
+      <Dependent Role="task">
+        <PropertyRef Name="developer_developerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="taskagendaItem">
+    <End Role="task" Type="BurnDown.Models.Store.tasks" Multiplicity="1" />
+    <End Role="agendaItem" Type="BurnDown.Models.Store.agendaItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="task">
+        <PropertyRef Name="taskId" />
+      </Principal>
+      <Dependent Role="agendaItem">
+        <PropertyRef Name="task_taskId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="projecttask">
+    <End Role="project" Type="BurnDown.Models.Store.projects" Multiplicity="1" />
+    <End Role="task" Type="BurnDown.Models.Store.tasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="project">
+        <PropertyRef Name="projectId" />
+      </Principal>
+      <Dependent Role="task">
+        <PropertyRef Name="project_projectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="developerproject">
+    <End Role="developer" Type="BurnDown.Models.Store.developers" Multiplicity="1" />
+    <End Role="project" Type="BurnDown.Models.Store.projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="developer">
+        <PropertyRef Name="developerId" />
+      </Principal>
+      <Dependent Role="project">
+        <PropertyRef Name="leadDeveloper" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BurnDown" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="DB" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="agendaItems" EntityType="BurnDown.agendaItem" />
+          <EntitySet Name="developers" EntityType="BurnDown.developer" />
+          <EntitySet Name="projects" EntityType="BurnDown.project" />
+          <EntitySet Name="tasks" EntityType="BurnDown.task" />
+          <AssociationSet Name="taskdeveloper" Association="BurnDown.taskdeveloper">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="developer" EntitySet="developers" />
+          </AssociationSet>
+          <AssociationSet Name="taskagendaItem" Association="BurnDown.taskagendaItem">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="agendaItem" EntitySet="agendaItems" />
+          </AssociationSet>
+          <AssociationSet Name="projecttask" Association="BurnDown.projecttask">
+            <End Role="project" EntitySet="projects" />
+            <End Role="task" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="developerproject" Association="BurnDown.developerproject">
+            <End Role="developer" EntitySet="developers" />
+            <End Role="project" EntitySet="projects" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="agendaItem">
+          <Key>
+            <PropertyRef Name="agendaItemId" />
+          </Key>
+          <Property Name="agendaItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="agendaItemName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="true" />
+          <Property Name="completed" Type="Boolean" Nullable="false" />
+          <Property Name="notes" Type="String" MaxLength="2000" Unicode="true" FixedLength="true" />
+          <NavigationProperty Name="task" Relationship="BurnDown.taskagendaItem" FromRole="agendaItem" ToRole="task" />
+          <Property Type="Int32" Name="task_taskId" Nullable="false" />
+        </EntityType>
+        <EntityType Name="developer">
+          <Key>
+            <PropertyRef Name="developerId" />
+          </Key>
+          <Property Name="developerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="true" />
+          <Property Name="lastName" Type="String" MaxLength="20" Unicode="true" FixedLength="true" />
+          <Property Name="email" Type="String" MaxLength="30" Unicode="true" FixedLength="true" />
+          <Property Name="phone" Type="String" MaxLength="12" Unicode="true" FixedLength="true" />
+          <Property Name="hoursPerDayAvailable" Type="Int32" />
+          <NavigationProperty Name="tasks" Relationship="BurnDown.taskdeveloper" FromRole="developer" ToRole="task" />
+          <NavigationProperty Name="projects" Relationship="BurnDown.developerproject" FromRole="developer" ToRole="project" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="projectId" />
+          </Key>
+          <Property Name="projectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="projectName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="true" />
+          <Property Name="priority" Type="Int32" Nullable="false" />
+          <Property Type="Int32" Name="leadDeveloper" Nullable="false" />
+          <NavigationProperty Name="tasks" Relationship="BurnDown.projecttask" FromRole="project" ToRole="task" />
+          <NavigationProperty Name="developer" Relationship="BurnDown.developerproject" FromRole="project" ToRole="developer" />
+        </EntityType>
+        <EntityType Name="task">
+          <Key>
+            <PropertyRef Name="taskId" />
+          </Key>
+          <Property Name="taskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="originalEstimatedHours" Type="Int32" Nullable="false" />
+          <Property Name="hoursSpentOnTask" Type="Int32" Nullable="false" />
+          <Property Name="shareOfProject" Type="Int32" />
+          <Property Name="percentCompleted" Type="Int32" />
+          <Property Name="priority" Type="Int32" Nullable="false" />
+          <Property Name="taskName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="true" />
+          <Property Name="startDate" Type="DateTime" Nullable="false" />
+          <Property Name="dueDate" Type="DateTime" Nullable="false" />
+          <Property Name="hoursForTasksWithHigherPriority" Type="Int32" />
+          <Property Name="notes" Type="String" MaxLength="2000" Unicode="true" FixedLength="true" />
+          <NavigationProperty Name="developer" Relationship="BurnDown.taskdeveloper" FromRole="task" ToRole="developer" />
+          <Property Type="Int32" Name="developer_developerId" Nullable="false" />
+          <NavigationProperty Name="agendaItems" Relationship="BurnDown.taskagendaItem" FromRole="task" ToRole="agendaItem" />
+          <NavigationProperty Name="project" Relationship="BurnDown.projecttask" FromRole="task" ToRole="project" />
+          <Property Type="Int32" Name="project_projectId" Nullable="false" />
+        </EntityType>
+        <Association Name="taskdeveloper">
+          <End Type="BurnDown.task" Role="task" Multiplicity="*" />
+          <End Type="BurnDown.developer" Role="developer" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="developer">
+              <PropertyRef Name="developerId" />
+            </Principal>
+            <Dependent Role="task">
+              <PropertyRef Name="developer_developerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="taskagendaItem">
+          <End Type="BurnDown.task" Role="task" Multiplicity="1" />
+          <End Type="BurnDown.agendaItem" Role="agendaItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="taskId" />
+            </Principal>
+            <Dependent Role="agendaItem">
+              <PropertyRef Name="task_taskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="projecttask">
+          <End Type="BurnDown.project" Role="project" Multiplicity="1" />
+          <End Type="BurnDown.task" Role="task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="projectId" />
+            </Principal>
+            <Dependent Role="task">
+              <PropertyRef Name="project_projectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="developerproject">
+          <End Type="BurnDown.developer" Role="developer" Multiplicity="1" />
+          <End Type="BurnDown.project" Role="project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="developer">
+              <PropertyRef Name="developerId" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="leadDeveloper" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BurnDownModelsStoreContainer" CdmEntityContainer="DB">
+    <EntitySetMapping Name="agendaItems">
+      <EntityTypeMapping TypeName="IsTypeOf(BurnDown.agendaItem)">
+        <MappingFragment StoreEntitySet="agendaItems">
+          <ScalarProperty Name="agendaItemId" ColumnName="agendaItemId" />
+          <ScalarProperty Name="agendaItemName" ColumnName="agendaItemName" />
+          <ScalarProperty Name="completed" ColumnName="completed" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="task_taskId" ColumnName="task_taskId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="developers">
+      <EntityTypeMapping TypeName="IsTypeOf(BurnDown.developer)">
+        <MappingFragment StoreEntitySet="developers">
+          <ScalarProperty Name="developerId" ColumnName="developerId" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="hoursPerDayAvailable" ColumnName="hoursPerDayAvailable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="projects">
+      <EntityTypeMapping TypeName="IsTypeOf(BurnDown.project)">
+        <MappingFragment StoreEntitySet="projects">
+          <ScalarProperty Name="projectId" ColumnName="projectId" />
+          <ScalarProperty Name="projectName" ColumnName="projectName" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="leadDeveloper" ColumnName="leadDeveloper" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tasks">
+      <EntityTypeMapping TypeName="IsTypeOf(BurnDown.task)">
+        <MappingFragment StoreEntitySet="tasks">
+          <ScalarProperty Name="taskId" ColumnName="taskId" />
+          <ScalarProperty Name="originalEstimatedHours" ColumnName="originalEstimatedHours" />
+          <ScalarProperty Name="hoursSpentOnTask" ColumnName="hoursSpentOnTask" />
+          <ScalarProperty Name="shareOfProject" ColumnName="shareOfProject" />
+          <ScalarProperty Name="percentCompleted" ColumnName="percentCompleted" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="taskName" ColumnName="taskName" />
+          <ScalarProperty Name="startDate" ColumnName="startDate" />
+          <ScalarProperty Name="dueDate" ColumnName="dueDate" />
+          <ScalarProperty Name="hoursForTasksWithHigherPriority" ColumnName="hoursForTasksWithHigherPriority" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="developer_developerId" ColumnName="developer_developerId" />
+          <ScalarProperty Name="project_projectId" ColumnName="project_projectId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Model2">
+        <EntityTypeShape EntityType="BurnDown.agendaItem" Width="1.5" PointX="0.75" PointY="0.75" Height="1.787985026041667" IsExpanded="true" />
+        <EntityTypeShape EntityType="BurnDown.developer" Width="1.5" PointX="6.5" PointY="1" Height="2.172587890625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BurnDown.project" Width="1.5" PointX="0.75" PointY="3.625" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="BurnDown.task" Width="1.5" PointX="3.625" PointY="0.625" Height="3.1340950520833331" IsExpanded="true" />
+        <AssociationConnector Association="BurnDown.taskdeveloper">
+          <ConnectorPoint PointX="5.125" PointY="2.1824446614583337" />
+          <ConnectorPoint PointX="6.5" PointY="2.1824446614583337" />
+        </AssociationConnector>
+        <AssociationConnector Association="BurnDown.taskagendaItem">
+          <ConnectorPoint PointX="3.625" PointY="1.8362939453125" />
+          <ConnectorPoint PointX="2.25" PointY="1.8362939453125" />
+        </AssociationConnector>
+        <AssociationConnector Association="BurnDown.projecttask">
+          <ConnectorPoint PointX="2.25" PointY="4.1728011067708328" />
+          <ConnectorPoint PointX="3.625" PointY="4.1728011067708328" />
+        </AssociationConnector>
+        <AssociationConnector Association="BurnDown.developerproject">
+          <ConnectorPoint PointX="7.25" PointY="3.5571907552083331" />
+          <ConnectorPoint PointX="7.25" PointY="5.2903450520833326" />
+          <ConnectorPoint PointX="2.25" PointY="5.2903450520833326" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

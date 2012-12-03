@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="bdownDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="bdownDBModelStoreContainer">
+          <EntitySet Name="agendaItems" EntityType="bdownDBModel.Store.agendaItems" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="devlopers" EntityType="bdownDBModel.Store.devlopers" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="projects" EntityType="bdownDBModel.Store.projects" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="sysdiagrams" EntityType="bdownDBModel.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tasks" EntityType="bdownDBModel.Store.tasks" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="agendaItems">
+          <Key>
+            <PropertyRef Name="agendaItemId" />
+          </Key>
+          <Property Name="agendaItemId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="agendaItemName" Type="nchar" Nullable="false" MaxLength="50" />
+          <Property Name="completed" Type="bit" Nullable="false" />
+          <Property Name="parentTask" Type="int" Nullable="false" />
+          <Property Name="notes" Type="nchar" MaxLength="2000" />
+        </EntityType>
+        <EntityType Name="devlopers">
+          <Key>
+            <PropertyRef Name="developerId" />
+          </Key>
+          <Property Name="developerId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="nchar" Nullable="false" MaxLength="20" />
+          <Property Name="lastName" Type="nchar" MaxLength="20" />
+          <Property Name="email" Type="nchar" MaxLength="30" />
+          <Property Name="phone" Type="nchar" MaxLength="12" />
+          <Property Name="hoursPerDayAvailable" Type="int" />
+        </EntityType>
+        <EntityType Name="projects">
+          <Key>
+            <PropertyRef Name="projectId" />
+          </Key>
+          <Property Name="projectId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="projectName" Type="nchar" Nullable="false" MaxLength="50" />
+          <Property Name="leadDeveloper" Type="int" Nullable="false" />
+          <Property Name="priority" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="tasks">
+          <Key>
+            <PropertyRef Name="taskId" />
+          </Key>
+          <Property Name="taskId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="assignedTo" Type="int" Nullable="false" />
+          <Property Name="originalEstimatedHours" Type="int" Nullable="false" />
+          <Property Name="hoursSpentOnTask" Type="int" Nullable="false" />
+          <Property Name="project_id" Type="int" Nullable="false" />
+          <Property Name="shareOfProject" Type="int" />
+          <Property Name="percentCompleted" Type="int" />
+          <Property Name="priority" Type="int" Nullable="false" />
+          <Property Name="taskName" Type="nchar" Nullable="false" MaxLength="50" />
+          <Property Name="startDate" Type="datetime" Nullable="false" />
+          <Property Name="dueDate" Type="datetime" Nullable="false" />
+          <Property Name="hoursForTasksWithHigherPriority" Type="int" />
+          <Property Name="notes" Type="nchar" MaxLength="2000" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bdownDBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="bdownDBEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="agendaItems" EntityType="bdownDBModel.agendaItem" />
+          <EntitySet Name="devlopers" EntityType="bdownDBModel.devloper" />
+          <EntitySet Name="projects" EntityType="bdownDBModel.project" />
+          <EntitySet Name="sysdiagrams" EntityType="bdownDBModel.sysdiagram" />
+          <EntitySet Name="tasks" EntityType="bdownDBModel.task" />
+        </EntityContainer>
+        <EntityType Name="agendaItem">
+          <Key>
+            <PropertyRef Name="agendaItemId" />
+          </Key>
+          <Property Name="agendaItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="agendaItemName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="true" />
+          <Property Name="completed" Type="Boolean" Nullable="false" />
+          <Property Name="parentTask" Type="Int32" Nullable="false" />
+          <Property Name="notes" Type="String" MaxLength="2000" Unicode="true" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="devloper">
+          <Key>
+            <PropertyRef Name="developerId" />
+          </Key>
+          <Property Name="developerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="true" />
+          <Property Name="lastName" Type="String" MaxLength="20" Unicode="true" FixedLength="true" />
+          <Property Name="email" Type="String" MaxLength="30" Unicode="true" FixedLength="true" />
+          <Property Name="phone" Type="String" MaxLength="12" Unicode="true" FixedLength="true" />
+          <Property Name="hoursPerDayAvailable" Type="Int32" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="projectId" />
+          </Key>
+          <Property Name="projectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="projectName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="true" />
+          <Property Name="leadDeveloper" Type="Int32" Nullable="false" />
+          <Property Name="priority" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" Unicode="true" FixedLength="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="task">
+          <Key>
+            <PropertyRef Name="taskId" />
+          </Key>
+          <Property Name="taskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="assignedTo" Type="Int32" Nullable="false" />
+          <Property Name="originalEstimatedHours" Type="Int32" Nullable="false" />
+          <Property Name="hoursSpentOnTask" Type="Int32" Nullable="false" />
+          <Property Name="project_id" Type="Int32" Nullable="false" />
+          <Property Name="shareOfProject" Type="Int32" />
+          <Property Name="percentCompleted" Type="Int32" />
+          <Property Name="priority" Type="Int32" Nullable="false" />
+          <Property Name="taskName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="true" />
+          <Property Name="startDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="dueDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="hoursForTasksWithHigherPriority" Type="Int32" />
+          <Property Name="notes" Type="String" MaxLength="2000" Unicode="true" FixedLength="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bdownDBModelStoreContainer" CdmEntityContainer="bdownDBEntities1">
+          <EntitySetMapping Name="agendaItems">
+            <EntityTypeMapping TypeName="bdownDBModel.agendaItem">
+              <MappingFragment StoreEntitySet="agendaItems">
+                <ScalarProperty Name="agendaItemId" ColumnName="agendaItemId" />
+                <ScalarProperty Name="agendaItemName" ColumnName="agendaItemName" />
+                <ScalarProperty Name="completed" ColumnName="completed" />
+                <ScalarProperty Name="parentTask" ColumnName="parentTask" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="devlopers">
+            <EntityTypeMapping TypeName="bdownDBModel.devloper">
+              <MappingFragment StoreEntitySet="devlopers">
+                <ScalarProperty Name="developerId" ColumnName="developerId" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="hoursPerDayAvailable" ColumnName="hoursPerDayAvailable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="projects">
+            <EntityTypeMapping TypeName="bdownDBModel.project">
+              <MappingFragment StoreEntitySet="projects">
+                <ScalarProperty Name="projectId" ColumnName="projectId" />
+                <ScalarProperty Name="projectName" ColumnName="projectName" />
+                <ScalarProperty Name="leadDeveloper" ColumnName="leadDeveloper" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="bdownDBModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tasks">
+            <EntityTypeMapping TypeName="bdownDBModel.task">
+              <MappingFragment StoreEntitySet="tasks">
+                <ScalarProperty Name="taskId" ColumnName="taskId" />
+                <ScalarProperty Name="assignedTo" ColumnName="assignedTo" />
+                <ScalarProperty Name="originalEstimatedHours" ColumnName="originalEstimatedHours" />
+                <ScalarProperty Name="hoursSpentOnTask" ColumnName="hoursSpentOnTask" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="shareOfProject" ColumnName="shareOfProject" />
+                <ScalarProperty Name="percentCompleted" ColumnName="percentCompleted" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+                <ScalarProperty Name="taskName" ColumnName="taskName" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="dueDate" ColumnName="dueDate" />
+                <ScalarProperty Name="hoursForTasksWithHigherPriority" ColumnName="hoursForTasksWithHigherPriority" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
