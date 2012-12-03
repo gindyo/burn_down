@@ -17,8 +17,8 @@ namespace BurnDown.Controllers
 
             var db = new BurnDown.DB();
             var projects = db.vProjects;
-            //var developers = db.devlopers;
-            //Dictionary<int,Models.devloper> devsResultDict = developers.ToDictionary(d=>d.developerId);
+            //var developers = db.developers;
+            //Dictionary<int,Models.developer> devsResultDict = developers.ToDictionary(d=>d.developerId);
             //ViewData["developers"] = devsResultDict;
           
        
@@ -81,11 +81,11 @@ namespace BurnDown.Controllers
         public ActionResult Create()
         {
             var db = new BurnDown.DB();
-            var developers = db.devlopers;
+            var developers = db.developers;
             
             IList<SelectListItem> devList = new List<SelectListItem>();
 
-            foreach (BurnDown.Models.devloper dev in developers)
+            foreach (BurnDown.Models.developer dev in developers)
             {
                 SelectListItem DevItem = new SelectListItem();
                 DevItem.Text = dev.firstName + " " + dev.lastName;
@@ -137,8 +137,8 @@ namespace BurnDown.Controllers
             var proj = from p in project where p.projectId == id select p;
           
             IList<SelectListItem> devList = new List<SelectListItem>();
-            var developers = db.devlopers;
-            foreach (BurnDown.Models.devloper dev in developers)
+            var developers = db.developers;
+            foreach (BurnDown.Models.developer dev in developers)
             {
                 SelectListItem DevItem = new SelectListItem();
                 DevItem.Text = dev.firstName + " " + dev.lastName;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BurnDown.Models;
 
 namespace BurnDown.Controllers
 {
@@ -14,7 +15,7 @@ namespace BurnDown.Controllers
         public ActionResult Index()
         {
             var db = new BurnDown.DB();
-            var developers = db.devlopers;
+            var developers = db.developers;
             return View(developers);
         }
 
@@ -24,7 +25,7 @@ namespace BurnDown.Controllers
         public ActionResult Details(int id)
         {
             var db = new BurnDown.DB();
-            var developers = db.devlopers;
+            var developers = db.developers;
             var dev = from devs in developers where devs.developerId == id select devs;
 
 
@@ -78,14 +79,14 @@ namespace BurnDown.Controllers
         // POST: /Developers/Create
 
         [HttpPost]
-        public ActionResult Create(BurnDown.Models.devloper developer)
+        public ActionResult Create(BurnDown.Models.developer developer)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var db = new BurnDown.DB();
-                    db.devlopers.InsertOnSubmit(developer);
+                    db.developers.InsertOnSubmit(developer);
                         db.SubmitChanges();
                     // TODO: Add insert logic here
 
@@ -108,7 +109,7 @@ namespace BurnDown.Controllers
         public ActionResult Edit(int id)
         {
             var db = new BurnDown.DB();
-            var developers = db.devlopers;
+            var developers = db.developers;
             var dev = from devs in developers where devs.developerId == id select devs;
             return View(dev.FirstOrDefault());
            
@@ -118,14 +119,14 @@ namespace BurnDown.Controllers
         // POST: /Developers/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, BurnDown.Models.devloper developer)
+        public ActionResult Edit(int id, BurnDown.Models.developer developer)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var db = new BurnDown.DB();
-                    var developers = db.devlopers;
+                    var developers = db.developers;
                     var dev = developers
                         .Where(w => w.developerId == developer.developerId)
                         .SingleOrDefault();

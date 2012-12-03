@@ -40,11 +40,11 @@ namespace BurnDown.Controllers
         public ActionResult Create(int id, System.Nullable<int> devId)
         {
             var db = new BurnDown.DB();
-            var developers = db.devlopers;
+            var developers = db.developers;
 
             IList<SelectListItem> devList = new List<SelectListItem>();
 
-            foreach (BurnDown.Models.devloper dev in developers)
+            foreach (BurnDown.Models.developer dev in developers)
             {
                 SelectListItem DevItem = new SelectListItem();
                 DevItem.Text = dev.firstName + " " + dev.lastName;
@@ -87,7 +87,7 @@ namespace BurnDown.Controllers
                 // TODO: Add insert logic here
 
 
-                var newTask = new BurnDown.Models.task();
+                var newTask = new BurnDown.Models.
                 newTask.priority = int.Parse(collection["priority"]);
                 newTask.taskName = collection["taskName"];
                 newTask.assignedTo = int.Parse(collection["ddList"]);
@@ -110,11 +110,11 @@ namespace BurnDown.Controllers
             //catch
             //{
             //    var db = new BurnDown.DB();
-            //    var developers = db.devlopers;
+            //    var developers = db.developers;
 
             //    IList<SelectListItem> devList = new List<SelectListItem>();
 
-            //    foreach (BurnDown.Models.devloper dev in developers)
+            //    foreach (BurnDown.Models.developer dev in developers)
             //    {
             //        SelectListItem DevItem = new SelectListItem();
             //        DevItem.Text = dev.firstName + " " + dev.lastName;
@@ -149,11 +149,11 @@ namespace BurnDown.Controllers
         public ActionResult Edit(int id)
         {
             var db = new BurnDown.DB();
-            var developers = db.devlopers;
+            var developers = db.developers;
 
             IList<SelectListItem> devList = new List<SelectListItem>();
 
-            foreach (BurnDown.Models.devloper dev in developers)
+            foreach (BurnDown.Models.developer dev in developers)
             {
                 SelectListItem DevItem = new SelectListItem();
                 DevItem.Text = dev.firstName + " " + dev.lastName;
@@ -222,11 +222,11 @@ namespace BurnDown.Controllers
                 //catch
                 //{
                 //    var db = new BurnDown.DB();
-                //    var developers = db.devlopers;
+                //    var developers = db.developers;
 
                 //    IList<SelectListItem> devList = new List<SelectListItem>();
 
-                //    foreach (BurnDown.Models.devloper dev in developers)
+                //    foreach (BurnDown.Models.developer dev in developers)
                 //    {
                 //        SelectListItem DevItem = new SelectListItem();
                 //        DevItem.Text = dev.firstName + " " + dev.lastName;
@@ -290,31 +290,31 @@ namespace BurnDown.Controllers
             }
         }
         [HttpGet]
-        public ActionResult CreateSubtask(int parentId)
+        public ActionResult CreateagendaItem(int parentId)
         {
             ViewBag.parentId = parentId;
             return View();
         }
         [HttpPost]
-        public ActionResult CreateSubtask(Models.subTask newT)
+        public ActionResult CreateagendaItem(Models.agendaItem newT)
         {
             var db = new BurnDown.DB();
-            db.subTasks.InsertOnSubmit(newT);
+            db.agendaItems.InsertOnSubmit(newT);
             db.SubmitChanges();
 
-            var allPtSubTasks =
-                 from aptst in db.subTasks
+            var allPtagendaItems =
+                 from aptst in db.agendaItems
                  where aptst.parentTask == newT.parentTask
                  select aptst;
 
-            var completedPtSubTasks =
-                    from aptst in db.subTasks
+            var completedPtagendaItems =
+                    from aptst in db.agendaItems
                     where aptst.parentTask == newT.parentTask && aptst.completed == true
                     select aptst;
 
 
-            double a = completedPtSubTasks.Count();
-            double b = allPtSubTasks.Count();
+            double a = completedPtagendaItems.Count();
+            double b = allPtagendaItems.Count();
 
 
             double percentageCompleted = (double)(a / b) * 100;
@@ -332,40 +332,40 @@ namespace BurnDown.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateSubtaskFromCSL(FormCollection collection)
+        public ActionResult CreateagendaItemFromCSL(FormCollection collection)
         {
 
             
             var db = new BurnDown.DB();
-            string[] namesArr = collection["subTaskName"].Split('\n');
+            string[] namesArr = collection["agendaItemName"].Split('\n');
             int parentTask = int.Parse(collection["parentTask"]);
 
             foreach (string s in namesArr)
             {
-                Models.subTask newT = new Models.subTask();
-                newT.subTaskName = s;
+                Models.agendaItem newT = new Models.agendaItem();
+                newT.agendaItemName = s;
                 newT.parentTask = parentTask;
                 if (s != "")
-                db.subTasks.InsertOnSubmit(newT);
+                db.agendaItems.InsertOnSubmit(newT);
             }
 
              
             
             db.SubmitChanges();
 
-            var allPtSubTasks =
-                 from aptst in db.subTasks
+            var allPtagendaItems =
+                 from aptst in db.agendaItems
                  where aptst.parentTask == parentTask
                  select aptst;
 
-            var completedPtSubTasks =
-                    from aptst in db.subTasks
+            var completedPtagendaItems =
+                    from aptst in db.agendaItems
                     where aptst.parentTask == parentTask && aptst.completed == true
                     select aptst;
 
 
-            double a = completedPtSubTasks.Count();
-            double b = allPtSubTasks.Count();
+            double a = completedPtagendaItems.Count();
+            double b = allPtagendaItems.Count();
 
 
             double percentageCompleted = (double)(a / b) * 100;
@@ -382,46 +382,46 @@ namespace BurnDown.Controllers
             return RedirectToAction("Details", new { id = parentTask });
         }
         
-        public ActionResult GetSubtasks(int id)
+        public ActionResult GetagendaItems(int id)
         {
             var db = new BurnDown.DB();
-            var subtasks =
-                 from st in db.subTasks
+            var agendaItems =
+                 from st in db.agendaItems
                  where st.parentTask == id
                  select st;
             ViewBag.parentId = id;
-            return PartialView(subtasks);
+            return PartialView(agendaItems);
         }
          
         
         [HttpPost]
-        public ActionResult UpdateSubtask(FormCollection pST)
+        public ActionResult UpdateagendaItem(FormCollection pST)
         {
             var db = new BurnDown.DB();
             
           
-            var subtask =
-                 (from st in db.subTasks
-                 where st.subTaskId == int.Parse(pST["subTaskId"])
+            var agendaItem =
+                 (from st in db.agendaItems
+                 where st.agendaItemId == int.Parse(pST["agendaItemId"])
                  select st).SingleOrDefault();
-            subtask.subTaskName = pST["subTaskName"];
-            subtask.completed = Boolean.Parse(pST["completed"].Split(new char[] {','})[0]);
+            agendaItem.agendaItemName = pST["agendaItemName"];
+            agendaItem.completed = Boolean.Parse(pST["completed"].Split(new char[] {','})[0]);
             
             db.SubmitChanges();
            
-            var allPtSubTasks =
-                  from aptst in db.subTasks
+            var allPtagendaItems =
+                  from aptst in db.agendaItems
                   where aptst.parentTask == int.Parse(pST["parentTask"])
                   select aptst;
 
-            var completedPtSubTasks =
-                    from aptst in db.subTasks
+            var completedPtagendaItems =
+                    from aptst in db.agendaItems
                     where aptst.parentTask == int.Parse(pST["parentTask"]) && aptst.completed == true
                     select aptst;
 
 
-            double a = completedPtSubTasks.Count();
-            double b = allPtSubTasks.Count();
+            double a = completedPtagendaItems.Count();
+            double b = allPtagendaItems.Count();
 
 
             double percentageCompleted = (double)(a / b ) * 100;
@@ -438,18 +438,18 @@ namespace BurnDown.Controllers
         }
 
     [HttpGet]
-    public ActionResult UpdateSubtask(int id)
+    public ActionResult UpdateagendaItem(int id)
     {
         var db = new BurnDown.DB();
 
-        var subtask =
-             (from st in db.subTasks
-              where st.subTaskId == id
+        var agendaItem =
+             (from st in db.agendaItems
+              where st.agendaItemId == id
               select st).SingleOrDefault();
 
 
 
-        return View(subtask);
+        return View(agendaItem);
     }
     }
 }
