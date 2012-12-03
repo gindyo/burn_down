@@ -36,37 +36,6 @@
 <p>
     @Html.ActionLink("Create New agendaItem", "CreateagendaItem", new { parentId = ViewBag.parentId })
 </p>
-<p align=center>
--OR-
-</p>
-
-
-
-@using (Html.BeginForm(new {action="CreateagendaItemFromCSL"}))
-{
-          
-
-        <div class="editor-label">
-            @Html.Label("Enter the names of new tasks (one per line)")
-        </div>
-        <div class="editor-field">
-            @Html.TextArea("agendaItemName")
-           
-        </div>
-
-        <div class="editor-field">
-            @Html.Hidden("completed")
-            @Html.Hidden("notes")
-        </div>
-
-        
-        <div class="editor-field">
-            @Html.Hidden("task_taskId", (int)ViewBag.parentId)
-           
-        </div>
-    
-    <input type="submit" value="Create" />
-}
 
 
 
