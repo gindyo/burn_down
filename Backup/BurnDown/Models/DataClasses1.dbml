@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="bdownDB" EntityNamespace="BurnDown.Models" ContextNamespace="BurnDown" Class="DB" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=bdownDB;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="bdownDBConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.projects" Member="projects">
+    <Type Name="project">
+      <Column Name="projectId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="projectName" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="leadDeveloper" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="priority" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="project_task" Member="tasks" ThisKey="projectId" OtherKey="project" Type="task" />
+      <Association Name="devloper_project" Member="devloper" ThisKey="leadDeveloper" OtherKey="developerId" Type="devloper" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.devlopers" Member="devlopers">
+    <Type Name="devloper">
+      <Column Name="developerId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="firstName" Type="System.String" DbType="NChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="lastName" Type="System.String" DbType="NChar(20)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
+      <Column Name="phone" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="hoursPerDayAvailable" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="devloper_task" Member="tasks" ThisKey="developerId" OtherKey="assignedTo" Type="task" />
+      <Association Name="devloper_project" Member="projects" ThisKey="developerId" OtherKey="leadDeveloper" Type="project" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tasks" Member="tasks">
+    <Type Name="task">
+      <Column Name="taskId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="assignedTo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="originalEstimatedHours" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="hoursSpentOnTask" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="project" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="shareOfProject" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="percentCompleted" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="priority" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="taskName" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="startDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="dueDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="hoursForTasksWithHigherPriority" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="task_subTask" Member="subTasks" ThisKey="taskId" OtherKey="parent" Type="subTask" />
+      <Association Name="devloper_task" Member="devloper" ThisKey="assignedTo" OtherKey="developerId" Type="devloper" IsForeignKey="true" />
+      <Association Name="project_task" Member="project1" ThisKey="project" OtherKey="projectId" Type="project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="subTasks">
+    <Type Name="subTask">
+      <Column Member="id" Type="System.Int32" CanBeNull="false" />
+      <Column Name="" Member="name" Type="System.String" CanBeNull="false" />
+      <Column Name="" Member="completed" Type="System.Boolean" CanBeNull="false" />
+      <Column Name="" Member="parent" Type="System.Int32" CanBeNull="false" />
+      <Column Name="" Member="notes" Type="System.String" CanBeNull="false" />
+      <Association Name="task_subTask" Member="task" ThisKey="parent" OtherKey="taskId" Type="task" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

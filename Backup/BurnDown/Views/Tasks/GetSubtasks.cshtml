@@ -1,0 +1,76 @@
+﻿@model IEnumerable<BurnDown.Models.subTask>
+
+
+<table>
+    <tr>
+        <th>
+            subTaskName
+        </th>
+        <th>
+            completed
+        </th>
+        <th>
+           
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.subTaskName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.completed)
+        </td>
+        
+        <td>
+            @Html.ActionLink("Update", "UpdateSubtask", new {id = item.subTaskId }) 
+           
+        </td>
+    </tr>
+}
+
+</table>
+
+<p>
+    @Html.ActionLink("Create New Subtask", "CreateSubtask", new { parentId = ViewBag.parentId })
+</p>
+<p align=center>
+-OR-
+</p>
+
+
+
+@using (Html.BeginForm(new {action="CreateSubTaskFromCSL"}))
+{
+          
+
+        <div class="editor-label">
+            @Html.Label("Enter the names of new tasks (one per line)")
+        </div>
+        <div class="editor-field">
+            @Html.TextArea("subTaskName")
+           
+        </div>
+
+        <div class="editor-field">
+            @Html.Hidden("completed")
+            @Html.Hidden("notes")
+        </div>
+
+        
+        <div class="editor-field">
+            @Html.Hidden("parentTask", (int)ViewBag.parentId)
+           
+        </div>
+    
+    <input type="submit" value="Create" />
+}
+
+
+
+
+
+
+

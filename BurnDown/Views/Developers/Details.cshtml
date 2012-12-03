@@ -1,0 +1,50 @@
+﻿@model BurnDown.Models.developer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>@Html.DisplayFor(model => model.firstName)  @Html.DisplayFor(model => model.lastName)</legend>
+    <div style="width:50%; float:left; padding-right:20px;">
+        <table >
+            <tr>
+                <td>
+                    Email: 
+                </td>
+                <td>
+                   @Html.DisplayFor(model => model.email)
+                </td>
+                
+            </tr>
+            <tr>
+                
+                <td>
+                   Phone: 
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.phone)
+                </td>
+            </tr>
+          
+        </table>
+    
+
+    </div>
+    <div style="float:left">
+    <p>Tasks: </p>
+<canvas id="chartCanvas" width="400" height="150" style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+</div>
+<script language=javascript>
+@Html.Raw(@ViewData["projectChart"].ToString())
+</script>
+<div style="clear:both"></div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.developerId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

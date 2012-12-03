@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BurnDown.Models.task>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>All Tasks</h2>
+
+<table>
+    <tr>
+       
+        <th>
+            Task Name
+        </th>
+        <th>
+            Project Name
+        </th>
+       
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.taskName)
+        </td>
+        <td>
+             @Html.ActionLink(item.project.projectName, "Details", new {controller = "Projects", id = item.project.projectId })
+        </td>
+      
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {  id=item.taskId}) |
+            @Html.ActionLink("Details", "Details", new {  id=item.taskId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.taskId })
+        </td>
+    </tr>
+}
+
+</table>

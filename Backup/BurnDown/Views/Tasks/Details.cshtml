@@ -1,0 +1,106 @@
+﻿@model BurnDown.Models.vTask
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>  @Html.DisplayFor(model => model.taskName) </legend>
+
+     
+    <table style="float:left;">
+        <tr>
+            <td>
+               Original Estimated Time (in hours)
+            </td>
+            <td>
+              @Html.DisplayFor(model => model.originalEstimatedHours)
+            </td>
+           
+        </tr>
+        <tr>
+            <td>
+              Hours Spent On Task
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.hoursSpentOnTask)
+            </td>
+           
+        </tr>
+        <tr>
+            <td>
+              % Of Project
+            </td>
+            <td>
+                 @Html.DisplayFor(model => model.shareOfProject)
+            </td>
+          
+        </tr>
+         <tr>
+            <td>
+              % Completed
+            </td>
+            <td>
+                 @Html.DisplayFor(model => model.percentCompleted)
+            </td>
+          
+        </tr>
+         <tr>
+            <td>
+              Priority
+            </td>
+            <td>
+                 @Html.DisplayFor(model => model.priority)
+            </td>
+          
+        </tr>
+         <tr>
+            <td>
+               Start Date
+            </td>
+            <td>
+                   @Html.DisplayFor(model => model.startDate)
+            </td>
+          
+        </tr>
+         <tr>
+            <td>
+               Due Date
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.dueDate)
+            </td>
+          
+        </tr>
+         <tr>
+            <td>
+               Project Name
+            <td>
+                @Html.DisplayFor(model => model.projectName)
+            </td>
+          
+        </tr>
+         <tr>
+            <td>
+               Assigined To
+            </td>
+            <td>
+               @Html.DisplayFor(model => model.firstName)  @Html.DisplayFor(model => model.lastName)
+            </td>
+          
+        </tr>
+        
+
+    </table>
+    <div style=" float : right;">
+         @{Html.RenderAction("GetSubtasks",new{id = Model.taskId} );}
+     </div>   
+</fieldset>
+
+ 
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.taskId }) |
+    @Html.ActionLink("Back to Project", "Details", new { id = Model.projectId, controller = "Projects"})
+</p>

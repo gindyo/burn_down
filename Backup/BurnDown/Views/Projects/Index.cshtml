@@ -1,0 +1,45 @@
+﻿@model IEnumerable<BurnDown.Models.vProject>
+
+@{
+    ViewBag.Title = "Projects";
+}
+
+<h2>List of all Projects</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+       
+        <th>
+         Project Name
+        </th>
+        <th>
+         Lead Developer
+        </th>
+        <th>
+         Project Priority
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.projectName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Developer_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.priority)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id=item.projectId}) 
+        </td>
+    </tr>
+}
+
+</table>

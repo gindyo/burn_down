@@ -1,0 +1,88 @@
+﻿@model IEnumerable<BurnDown.Models.vTask>
+
+@{
+    ViewBag.Title = "Details";
+ }
+
+
+ @section JavaScript
+{
+<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="@Url.Content("~/Content/jplot/dist/jquery.jqplot.js")"></script>
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/jplot/dist/jquery.jqplot.css")" />
+}
+<h2>  @Html.Label(@ViewData["projectName"].ToString()) Details</h2>
+
+<p>
+    @Html.ActionLink("Create New Task", "Create", new { controller = "Tasks", id = @ViewData["projectId"], devId =(int) @ViewData["devId"] })
+</p>
+<table width="50%" style="float:left">
+    <tr>
+        <th>
+            Task Id
+        </th>
+        <th>
+            % Completed
+        </th>
+       
+        <th>
+            Priority
+        </th>
+        <th>
+            Task Name
+        </th>
+      
+       <th>
+           Assigned To
+        </th>
+       <th>
+           Task Actions
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.taskId)
+        </td>
+       <td>
+            @Html.DisplayFor(modelItem => item.percentCompleted)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.priority)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.taskName)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.firstName)
+        
+            @Html.DisplayFor(modelItem => item.lastName)
+        </td>
+       
+        <td>
+         
+            @Html.ActionLink("Task Details", "/Details", new { controller="Tasks", id=item.taskId }) |
+            @Html.ActionLink("Edit", "/Edit", new { controller="Tasks", id=item.taskId })
+           
+        </td>
+    </tr>
+}
+
+</table>
+
+<div style="float:right">
+<p>Tasks:</p>
+<canvas id="chartCanvas" width="400" height="150" style="border:1px solid #c3c3c3; clear:both">
+Your browser does not support the canvas element.
+
+</canvas>
+<br />
+<img src="@Url.Content("~/content/images/rect3872.png")" />
+</div>
+<script language=javascript>
+@Html.Raw(@ViewData["projectChart"].ToString())
+</script>
+<div style="clear:both"></div>

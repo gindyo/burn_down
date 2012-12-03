@@ -1,0 +1,64 @@
+﻿@model BurnDown.Models.agendaItem
+
+@{
+    ViewBag.Title = "UpdateAgendaItem";
+}
+
+<h2>UpdateAgendaItem</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>agendaItem</legend>
+
+        @Html.HiddenFor(model => model.agendaItemId)
+
+        <table style="border:none; width:50%">
+        <tr>
+        <td style="border:none">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.agendaItemName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.agendaItemName)
+            @Html.ValidationMessageFor(model => model.agendaItemName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.completed, "Completed")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.completed)
+            @Html.ValidationMessageFor(model => model.completed)
+        </div>
+        </td>
+    <td style="border:none">
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.notes, "Notes")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.notes)
+            @Html.ValidationMessageFor(model => model.notes)
+        </div>
+
+        
+        <div class="editor-field">
+            @Html.HiddenFor(model => model.task_taskId)
+            @Html.ValidationMessageFor(model => model.task_taskId)
+        </div>
+       </td>
+     </tr>
+     </table>
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
