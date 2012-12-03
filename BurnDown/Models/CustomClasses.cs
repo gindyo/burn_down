@@ -108,7 +108,7 @@ namespace BurnDown.Models
 
             }
 
-            clickDetection(taskCoordinates, canvasName);
+            //clickDetection(taskCoordinates, canvasName);
 
 
 
@@ -170,7 +170,7 @@ namespace BurnDown.Models
 
             }
 
-            clickDetection(projectCoordinates, canvasName);
+            //clickDetection(projectCoordinates, canvasName);
 
             return jsOutput.ToString();
         }
