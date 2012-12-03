@@ -1,0 +1,47 @@
+﻿@model BurnDown.Models.subTask
+
+@{
+    ViewBag.Title = "CreateSubtask";
+}
+
+<h2>CreateSubtask</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>subTask</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.subTaskName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.subTaskName)
+            @Html.ValidationMessageFor(model => model.subTaskName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.completed)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.completed)
+            @Html.ValidationMessageFor(model => model.completed)
+        </div>
+
+        
+        <div class="editor-field">
+            @Html.Hidden("parentTask",(int)ViewBag.parentId)
+            @Html.ValidationMessageFor(model => model.parentTask)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

@@ -1,0 +1,106 @@
+﻿@model BurnDown.Models.vTask
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@section JavaScript{
+    
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.js")" type="text/javascript"></script>
+    
+
+ <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+<script>
+ 
+   $(document).ready(
+   function() {
+	        $("#startDate").datepicker();
+            $("#dueDate").datepicker();
+    });
+   
+       
+   
+    
+</script>
+
+}
+
+<h2>Create</h2>
+
+
+  <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+  
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Task</legend>
+
+       <div class="editor-label">
+            @Html.LabelFor(model => model.taskName,"Task Name")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.taskName)
+            @Html.ValidationMessageFor(model => model.taskName, "Task Name")
+        </div>
+
+         <div class="editor-label">
+         @Html.Label("Project")
+         </div>
+         <div class="editor-field">
+         @Html.DropDownList("projDDList")   
+        </div>  
+      
+        <div class="editor-label">
+         @Html.Label("Assigned To")
+         </div>
+         <div class="editor-field">
+         @Html.DropDownList("ddList")   
+        </div>   
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.originalEstimatedHours, "Original Time to Complete Estimation (in hours)")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.originalEstimatedHours)
+            @Html.ValidationMessageFor(model => model.originalEstimatedHours, "Original Time to Complete Estimation (in hours) is required")
+        </div>
+
+        
+
+       <div class="editor-label">
+            @Html.LabelFor(model => model.priority, "Priority")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.priority)
+            @Html.ValidationMessageFor(model => model.priority)
+        </div>
+
+        
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.startDate, "Start Date")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.startDate)
+            @Html.ValidationMessageFor(model => model.startDate, "Start Date is required")
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.dueDate, "Due Date")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.dueDate)
+            @Html.ValidationMessageFor(model => model.dueDate, "Due Date is required")
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

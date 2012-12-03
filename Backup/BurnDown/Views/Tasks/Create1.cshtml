@@ -1,0 +1,161 @@
+﻿@model BurnDown.Models.vTask
+
+@{
+    ViewBag.Title = "Create1";
+}
+
+<h2>Create1</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>vTask</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.taskId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.taskId)
+            @Html.ValidationMessageFor(model => model.taskId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.assignedTo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.assignedTo)
+            @Html.ValidationMessageFor(model => model.assignedTo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.originalEstimatedHours)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.originalEstimatedHours)
+            @Html.ValidationMessageFor(model => model.originalEstimatedHours)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.hoursSpentOnTask)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.hoursSpentOnTask)
+            @Html.ValidationMessageFor(model => model.hoursSpentOnTask)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.project)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.project)
+            @Html.ValidationMessageFor(model => model.project)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.shareOfProject)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.shareOfProject)
+            @Html.ValidationMessageFor(model => model.shareOfProject)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.percentCompleted)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.percentCompleted)
+            @Html.ValidationMessageFor(model => model.percentCompleted)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.priority)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.priority)
+            @Html.ValidationMessageFor(model => model.priority)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.taskName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.taskName)
+            @Html.ValidationMessageFor(model => model.taskName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.startDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.startDate)
+            @Html.ValidationMessageFor(model => model.startDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.dueDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.dueDate)
+            @Html.ValidationMessageFor(model => model.dueDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.hoursForTasksWithHigherPriority)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.hoursForTasksWithHigherPriority)
+            @Html.ValidationMessageFor(model => model.hoursForTasksWithHigherPriority)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.projectName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.projectName)
+            @Html.ValidationMessageFor(model => model.projectName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.developerId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.developerId)
+            @Html.ValidationMessageFor(model => model.developerId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.firstName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.firstName)
+            @Html.ValidationMessageFor(model => model.firstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.lastName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.lastName)
+            @Html.ValidationMessageFor(model => model.lastName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.projectId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.projectId)
+            @Html.ValidationMessageFor(model => model.projectId)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

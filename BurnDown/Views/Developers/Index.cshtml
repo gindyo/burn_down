@@ -1,0 +1,35 @@
+﻿@model IEnumerable<BurnDown.Models.developer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>List of All Developlers</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+           Name
+        </th>
+       
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.firstName)
+            @Html.DisplayFor(modelItem => item.lastName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.developerId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.developerId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.developerId })
+        </td>
+    </tr>
+}
+
+</table>

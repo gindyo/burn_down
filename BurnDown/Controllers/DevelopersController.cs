@@ -166,7 +166,12 @@ namespace BurnDown.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
+                using (DB db = new BurnDown.Models.DB())
+                {
+                    var devObject = db.developers.Single( d => d.developerId == id);
+                    db.developers.DeleteObject(devObject);
+                    db.SaveChanges();
+                }
  
                 return RedirectToAction("Index");
             }
