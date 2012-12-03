@@ -6,15 +6,8 @@
       <Column Name="projectName" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="leadDeveloper" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="priority" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.vProjects" Member="vProjects">
-    <Type Name="vProject">
-      <Column Name="projectId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="projectName" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="developerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="[Developer Name]" Member="Developer_Name" Type="System.String" DbType="NChar(40)" CanBeNull="true" />
-      <Column Name="priority" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="project_task" Member="tasks" ThisKey="projectId" OtherKey="project" Type="task" />
+      <Association Name="devloper_project" Member="devloper" ThisKey="leadDeveloper" OtherKey="developerId" Type="devloper" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.devlopers" Member="devlopers">
@@ -25,27 +18,8 @@
       <Column Name="email" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
       <Column Name="phone" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
       <Column Name="hoursPerDayAvailable" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.vTasks" Member="vTasks">
-    <Type Name="vTask">
-      <Column Name="taskId" Type="System.Int32" DbType="Int" CanBeNull="false" />
-      <Column Name="assignedTo" Type="System.Int32" DbType="Int" CanBeNull="false" />
-      <Column Name="originalEstimatedHours" Type="System.Int32" DbType="Int" CanBeNull="false" />
-      <Column Name="hoursSpentOnTask" Type="System.Int32" DbType="Int" CanBeNull="false" />
-      <Column Name="project" Type="System.Int32" DbType="Int" CanBeNull="false" />
-      <Column Name="shareOfProject" Type="System.Int32" DbType="Int" CanBeNull="false" />
-      <Column Name="percentCompleted" Type="System.Int32" DbType="Int" CanBeNull="false" />
-      <Column Name="priority" Type="System.Int32" DbType="Int" CanBeNull="false" />
-      <Column Name="taskName" Type="System.String" DbType="NChar(50)" CanBeNull="false" />
-      <Column Name="startDate" Type="System.DateTime" DbType="DateTime" CanBeNull="false" />
-      <Column Name="dueDate" Type="System.DateTime" DbType="DateTime" CanBeNull="false" />
-      <Column Name="hoursForTasksWithHigherPriority" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="projectName" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="true" />
-      <Column Name="developerId" Type="System.Int32" DbType="Int" CanBeNull="false" />
-      <Column Name="firstName" Type="System.String" DbType="NChar(20)" CanBeNull="true" />
-      <Column Name="lastName" Type="System.String" DbType="NChar(20)" CanBeNull="true" />
-      <Column Name="projectId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="devloper_task" Member="tasks" ThisKey="developerId" OtherKey="assignedTo" Type="task" />
+      <Association Name="devloper_project" Member="projects" ThisKey="developerId" OtherKey="leadDeveloper" Type="project" />
     </Type>
   </Table>
   <Table Name="dbo.tasks" Member="tasks">
@@ -62,6 +36,19 @@
       <Column Name="startDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="dueDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="hoursForTasksWithHigherPriority" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="task_subTask" Member="subTasks" ThisKey="taskId" OtherKey="parent" Type="subTask" />
+      <Association Name="devloper_task" Member="devloper" ThisKey="assignedTo" OtherKey="developerId" Type="devloper" IsForeignKey="true" />
+      <Association Name="project_task" Member="project1" ThisKey="project" OtherKey="projectId" Type="project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="subTasks">
+    <Type Name="subTask">
+      <Column Member="id" Type="System.Int32" CanBeNull="false" />
+      <Column Name="" Member="name" Type="System.String" CanBeNull="false" />
+      <Column Name="" Member="completed" Type="System.Boolean" CanBeNull="false" />
+      <Column Name="" Member="parent" Type="System.Int32" CanBeNull="false" />
+      <Column Name="" Member="notes" Type="System.String" CanBeNull="false" />
+      <Association Name="task_subTask" Member="task" ThisKey="parent" OtherKey="taskId" Type="task" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
