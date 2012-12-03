@@ -22,6 +22,7 @@ namespace BurnDown.Models
         DateTime startDate { get; set; }
         DateTime dueDate { get; set; }
         int percentCompleted { get; set; }
+        string status { get; }
 
 
     }

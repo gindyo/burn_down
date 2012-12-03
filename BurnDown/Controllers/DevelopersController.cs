@@ -14,7 +14,7 @@ namespace BurnDown.Controllers
 
         public ActionResult Index()
         {
-            var db = new BurnDown.DB();
+            var db = new BurnDown.Models.DB();
             var developers = db.developers;
             return View(developers);
         }
@@ -24,24 +24,24 @@ namespace BurnDown.Controllers
 
         public ActionResult Details(int id)
         {
-            var db = new BurnDown.DB();
+            var db = new BurnDown.Models.DB();
             var developers = db.developers;
             var dev = from devs in developers where devs.developerId == id select devs;
 
 
 
-           var tasks = db.vTasks;
+           var tasks = db.tasks;
 
-            var devTasks =
+            var detasks =
                 from t in tasks
-                where t.assignedTo == id
+                where t.developer_developerId == id
                 select t;
 
-            foreach (var task in devTasks)
+            foreach (var task in detasks)
             {
                 var thp =
                     from t in tasks
-                    where t.developerId == task.developerId && t.priority > task.priority
+                    where t.developer_developerId == task.developer_developerId && t.priority > task.priority
                     select new { t.originalEstimatedHours, t.hoursSpentOnTask };
 
                 int hoursWithHigherPriority = 0;
@@ -54,11 +54,11 @@ namespace BurnDown.Controllers
 
             }
 
-            Models.projectChart pc = new Models.projectChart(devTasks.ToArray());
+            Models.projectChart pc = new Models.projectChart(detasks.ToArray());
 
             ViewData["projectChart"] = pc.createTasksChart("chartCanvas", 150, 400);
 
-           // return View(devTasks);
+           // return View(detasks);
 
 
 
@@ -85,9 +85,9 @@ namespace BurnDown.Controllers
             {
                 try
                 {
-                    var db = new BurnDown.DB();
-                    db.developers.InsertOnSubmit(developer);
-                        db.SubmitChanges();
+                    var db = new BurnDown.Models.DB();
+                    db.developers.AddObject(developer);
+                        db.SaveChanges();
                     // TODO: Add insert logic here
 
                     return RedirectToAction("Index");
@@ -108,7 +108,7 @@ namespace BurnDown.Controllers
  
         public ActionResult Edit(int id)
         {
-            var db = new BurnDown.DB();
+            var db = new BurnDown.Models.DB();
             var developers = db.developers;
             var dev = from devs in developers where devs.developerId == id select devs;
             return View(dev.FirstOrDefault());
@@ -125,7 +125,7 @@ namespace BurnDown.Controllers
             {
                 try
                 {
-                    var db = new BurnDown.DB();
+                    var db = new BurnDown.Models.DB();
                     var developers = db.developers;
                     var dev = developers
                         .Where(w => w.developerId == developer.developerId)
@@ -134,7 +134,7 @@ namespace BurnDown.Controllers
                     dev.lastName = developer.lastName;
                     dev.email = developer.email;
                     dev.phone = developer.phone;
-                    db.SubmitChanges();
+                    db.SaveChanges();
                     // TODO: Add insert logic here
 
                     return RedirectToAction("Index");
@@ -166,7 +166,12 @@ namespace BurnDown.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
+                using (DB db = new BurnDown.Models.DB())
+                {
+                    var devObject = db.developers.Single( d => d.developerId == id);
+                    db.developers.DeleteObject(devObject);
+                    db.SaveChanges();
+                }
  
                 return RedirectToAction("Index");
             }
