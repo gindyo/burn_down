@@ -80,7 +80,7 @@ namespace BurnDown.Controllers
         //
         // POST: /Tasks/Create
 
-        [Authorize]
+        
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
@@ -147,7 +147,7 @@ namespace BurnDown.Controllers
         
         //
         // GET: /Tasks/Edit/5
-        [Authorize]
+        
         public ActionResult Edit(int id)
         {
             var db = new BurnDown.Models.DB();
@@ -194,7 +194,7 @@ namespace BurnDown.Controllers
 
         //
         // POST: /Tasks/Edit/5
-        [Authorize]
+        
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -276,7 +276,7 @@ namespace BurnDown.Controllers
 
         //
         // POST: /Tasks/Delete/5
-        [Authorize]
+        
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
@@ -292,7 +292,7 @@ namespace BurnDown.Controllers
             }
         }
         
-        [Authorize]
+        
         [HttpGet]
         public ActionResult CreateagendaItem(int parentId)
         {
@@ -337,7 +337,7 @@ namespace BurnDown.Controllers
             return RedirectToAction("Details", new {id = newT.task_taskId});
         }
 
-        [Authorize]
+       
         [HttpPost]
         public ActionResult CreateagendaItemFromCSL(FormCollection collection)
         {
@@ -400,7 +400,7 @@ namespace BurnDown.Controllers
             return PartialView(agendaItems);
         }
 
-        [Authorize]
+       
         [HttpPost]
         public ActionResult UpdateAgendaItem(FormCollection pST)
         {
@@ -444,7 +444,7 @@ namespace BurnDown.Controllers
             return RedirectToAction("Details", new { id = int.Parse(pST["task_taskId"]) });
         }
        
-        [Authorize]
+       
         [HttpGet]
         public ActionResult UpdateAgendaItem(int id)
     {
