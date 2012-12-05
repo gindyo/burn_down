@@ -195,33 +195,7 @@ namespace BurnDown.Controllers
         {
             db.agendaItems.AddObject(newT);
             db.SaveChanges();
-
-            var allPtagendaItems =
-                 from aptst in db.agendaItems
-                 where aptst.task_taskId == newT.task_taskId
-                 select aptst;
-
-            var completedPtagendaItems =
-                    from aptst in db.agendaItems
-                    where aptst.task_taskId == newT.task_taskId && aptst.completed == true
-                    select aptst;
-
-
-            double a = completedPtagendaItems.Count();
-            double b = allPtagendaItems.Count();
-
-
-            double percentageCompleted = (double)(a / b) * 100;
-
-            BurnDown.Models.task paretnTask =
-                (from pt in db.tasks
-                 where pt.taskId == newT.task_taskId
-                 select pt).SingleOrDefault();
-
-            paretnTask.percentCompleted = (int)Math.Round(percentageCompleted, 0);
-            db.SaveChanges();
-
-           
+            updateParentTaskCompletionStatus(newT.task_taskId);
             return RedirectToAction("Details", new {id = newT.task_taskId});
         }
 
@@ -232,42 +206,20 @@ namespace BurnDown.Controllers
             string[] namesArr = collection["agendaItemName"].Split('\n');
             int task_taskId = int.Parse(collection["task_taskId"]);
 
-            foreach (string s in namesArr)
+            using (DB db = new DB())
             {
-                Models.agendaItem newT = new Models.agendaItem();
-                newT.agendaItemName = s;
-                newT.task_taskId = task_taskId;
-                if (s != "")
-                db.agendaItems.AddObject(newT);
+                foreach (string s in namesArr)
+                {
+                    Models.agendaItem newT = new Models.agendaItem();
+                    newT.agendaItemName = s;
+                    newT.task_taskId = task_taskId;
+                    if (s != "")
+                        db.agendaItems.AddObject(newT);
+                }
+
+                db.SaveChanges();
+                updateParentTaskCompletionStatus(task_taskId);
             }
-
-            db.SaveChanges();
-
-            var allPtagendaItems =
-                 from aptst in db.agendaItems
-                 where aptst.task_taskId == task_taskId
-                 select aptst;
-
-            var completedPtagendaItems =
-                    from aptst in db.agendaItems
-                    where aptst.task_taskId == task_taskId && aptst.completed == true
-                    select aptst;
-
-
-            double a = completedPtagendaItems.Count();
-            double b = allPtagendaItems.Count();
-
-
-            double percentageCompleted = (double)(a / b) * 100;
-
-            BurnDown.Models.task paretnTask =
-                (from pt in db.tasks
-                 where pt.taskId == task_taskId
-                 select pt).SingleOrDefault();
-
-            paretnTask.percentCompleted = (int)Math.Round(percentageCompleted, 0);
-            db.SaveChanges();
-
 
             return RedirectToAction("Details", new { id = task_taskId });
         }
@@ -288,57 +240,58 @@ namespace BurnDown.Controllers
         public ActionResult UpdateAgendaItem(FormCollection pST)
         {
            
-            var agendaItem =
-                 (from st in db.agendaItems
-                 where st.agendaItemId == int.Parse(pST["agendaItemId"])
-                 select st).SingleOrDefault();
-            agendaItem.agendaItemName = pST["agendaItemName"];
-            agendaItem.completed = Boolean.Parse(pST["completed"].Split(new char[] {','})[0]);
-            
-            db.SaveChanges();
+            var original_item_id = int.Parse(pST["agendaItemId"]);
            
-            var allPtagendaItems =
-                  from aptst in db.agendaItems
-                  where aptst.task_taskId == int.Parse(pST["task_taskId"])
-                  select aptst;
-
-            var completedPtagendaItems =
-                    from aptst in db.agendaItems
-                    where aptst.task_taskId == int.Parse(pST["task_taskId"]) && aptst.completed == true
-                    select aptst;
-
-
-            double a = completedPtagendaItems.Count();
-            double b = allPtagendaItems.Count();
-
-
-            double percentageCompleted = (double)(a / b ) * 100;
-
-            BurnDown.Models.task paretnTask =
-                (from pt in db.tasks
-                 where pt.taskId == int.Parse(pST["task_taskId"])
-                 select pt).SingleOrDefault();
-
-            paretnTask.percentCompleted = (int)Math.Round(percentageCompleted, 0);
-            db.SaveChanges();
-            ViewBag.parentId = int.Parse(pST["task_taskId"]);
-            return RedirectToAction("Details", new { id = int.Parse(pST["task_taskId"]) });
+            agendaItem new_item = new agendaItem();
+               new_item.agendaItemName = pST["agendaItemName"];
+               new_item.completed = Boolean.Parse(pST["completed"].Split(new char[] { ',' })[0]);
+            
+            var parent_task_id = int.Parse(pST["task_taskId"]);
+            updateAI(original_item_id, new_item);
+            updateParentTaskCompletionStatus(parent_task_id);
+           
+           return RedirectToAction("Details", new { id = parent_task_id });
         }
        
         [Authorize]
         [HttpGet]
         public ActionResult UpdateAgendaItem(int id)
-    {
-       
-
-        var agendaItem =
-             (from st in db.agendaItems
-              where st.agendaItemId == id
-              select st).SingleOrDefault();
+        {
+            var agendaItem = db.agendaItems.SingleOrDefault(i => i.agendaItemId == id);
+            return View(agendaItem);
+        }
 
 
+        private void updateAI(int original_item_id, agendaItem new_item)
+        {
+            using (DB db = new DB())
+            {
+                var original_item = (from oi in db.agendaItems
+                                     where oi.agendaItemId == original_item_id
+                                     select oi).First();
+                original_item.agendaItemName = new_item.agendaItemName;
+                original_item.completed = new_item.completed;
 
-        return View(agendaItem);
-    }
+                db.SaveChanges();
+            }
+
+        }
+        private void updateParentTaskCompletionStatus(int parent_task_id){
+            using (DB db = new DB())
+            {
+                var parent_task = (from t in db.tasks
+                                  where t.taskId == parent_task_id
+                                  select t).SingleOrDefault();
+                var totalNumberOfItemsForThisTask = parent_task.agendaItems.Count();
+                var numberOfCompletedItems = parent_task.agendaItems.Where(ai => ai.completed == true).Count();
+                Decimal taskCompletionPercentage = (decimal)numberOfCompletedItems / (decimal)totalNumberOfItemsForThisTask;
+                parent_task.percentCompleted = (int)Math.Round((taskCompletionPercentage * 100), 0);
+                db.SaveChanges();
+            }
+        }
+
+
+
+
     }
 }

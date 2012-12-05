@@ -21,6 +21,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,22 +48,22 @@
     <DeployIisAppPath>Default Web Site/burndown</DeployIisAppPath>
     <PublishDatabaseSettings>
       <Objects>
-        <ObjectGroup Name="ApplicationServices-Deployment" Order="2">
-          <Destination Path="data source=.\SQLSERVER2005%3buser=ginevd%3bpassword=Z00202048%3b initial catalog=ginevd" />
+        <ObjectGroup Name="ApplicationServices-Deployment" Order="2" Enabled="False">
+          <Destination Path="Server=tcp:t5a8kanlx9.database.windows.net,1433%3bDatabase=DB%3bUser ID=gindyo%40t5a8kanlx9%3bPassword=%4020winter12%3bTrusted_Connection=False%3bEncrypt=True%3bConnection Timeout=30%3b" />
           <Object Type="dbFullSql">
             <PreSource Path="Data Source=.\SQLEXPRESS%3bAttachDbFilename=|DataDirectory|aspnetdb.mdf%3bIntegrated Security=True%3bUser Instance=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Release\AutoScripts\ApplicationServices-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
-        <ObjectGroup Name="bdownDBConnectionString-Deployment" Order="3">
-          <Destination Path="data source=.\SQLSERVER2005%3buser=ginevd%3bpassword=Z00202048%3b initial catalog=ginevd" />
+        <ObjectGroup Name="bdownDBConnectionString-Deployment" Order="3" Enabled="True">
+          <Destination Path="Server=tcp:t5a8kanlx9.database.windows.net,1433%3bDatabase=DB%3bUser ID=gindyo%40t5a8kanlx9%3bPassword=%4020winter12%3bTrusted_Connection=False%3bEncrypt=True%3bConnection Timeout=30%3b" />
           <Object Type="dbFullSql">
             <PreSource Path="Data Source=.\sqlexpress%3bInitial Catalog=bdownDB%3bIntegrated Security=True" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Release\AutoScripts\bdownDBConnectionString-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
-        <ObjectGroup Name="bdownDBEntities-Deployment" Order="1">
-          <Destination Path="data source=.\SQLSERVER2005%3buser=ginevd%3bpassword=Z00202048%3b initial catalog=ginevd" />
+        <ObjectGroup Name="bdownDBEntities-Deployment" Order="1" Enabled="False">
+          <Destination Path="Server=tcp:t5a8kanlx9.database.windows.net,1433%3bDatabase=DB%3bUser ID=gindyo%40t5a8kanlx9%3bPassword=%4020winter12%3bTrusted_Connection=False%3bEncrypt=True%3bConnection Timeout=30%3b" />
           <Object Type="dbFullSql">
             <PreSource Path="Data Source=.\sqlexpress%3bInitial Catalog=bdownDB%3bIntegrated Security=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Release\AutoScripts\bdownDBEntities-Deployment_SchemaOnly.sql" Transacted="True" />
@@ -69,7 +73,7 @@
     </PublishDatabaseSettings>
     <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
     <ExcludeApp_Data>true</ExcludeApp_Data>
-    <PublishDatabases>false</PublishDatabases>
+    <PublishDatabases>true</PublishDatabases>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
@@ -339,6 +343,14 @@
   <ItemGroup>
     <Content Include="Views\Tasks\Delete.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\burndown - FTP-1.pubxml" />
+    <None Include="Properties\PublishProfiles\burndown - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\burndown - Web Deploy-1.pubxml" />
+    <None Include="Properties\PublishProfiles\burndown - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Indra.pubxml" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -361,7 +373,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>61626</DevelopmentServerPort>
+          <DevelopmentServerPort>1286</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
